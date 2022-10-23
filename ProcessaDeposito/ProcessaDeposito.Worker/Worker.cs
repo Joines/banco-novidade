@@ -27,7 +27,9 @@ namespace ProcessaDeposito.Worker
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                _logger.LogInformation("Worker running at: {time}", 
+                    DateTimeOffset.Now);
+                
                 await Task.Delay(1000, stoppingToken);
 
                 await DoProcessadorAsync(stoppingToken);
@@ -40,13 +42,16 @@ namespace ProcessaDeposito.Worker
             {
                 try
                 {
-                    IProcessador processador = scope.ServiceProvider.GetRequiredService<IProcessador>();
+                    IProcessador processador = scope.ServiceProvider
+                        .GetRequiredService<IProcessador>();
 
-                    var result = await processador.ProcessarDepositosAsync(cancellationToken);
+                    var result = await processador
+                        .ProcessarDepositosAsync(cancellationToken);
                 }
                 catch(Exception ex)
                 {
-                    _logger.LogWarning(ex, "Falha ao processar depositos");
+                    _logger
+                        .LogWarning(ex, "Falha ao processar depositos");
                 }
             }
         }
